@@ -1,5 +1,7 @@
 
 
+using System.Numerics;
+
 public class PotenciaInversa: IPotencia{
     
     public static void Execute(double[] vOld, double[,] matrix, double epsilon, double lambdaOld = 0.0){
@@ -13,15 +15,8 @@ public class PotenciaInversa: IPotencia{
         while(erroRelativo > epsilon)
         {      
             ++steps;
-            for(int i = 0; i < length; i++)
-            {
-                double sum = 0;
-                for(int j = 0; j < length; j++)
-                {
-                    sum +=  matrix[i,j] * vOld[j]; 
-                }
-                vNew[i] = sum;
-            }
+            vNew = LU.Solver(matrix, vOld);
+
             lambdaNew = Utils.dotProduct(vOld, vNew);
 
             erroRelativo = Math.Abs((lambdaNew - lambdaOld) / lambdaNew);
@@ -29,10 +24,12 @@ public class PotenciaInversa: IPotencia{
             lambdaOld = lambdaNew;
             
         }
+        lambdaOld = 1.0 /lambdaOld;
         Console.WriteLine($"Lambda Old: {lambdaOld}\nVector elements:");
         foreach(double value in vOld){
             Console.Write($"{value}, " );
         }
         Console.WriteLine($"\nNº de passos: {steps}");
     }
+
 }

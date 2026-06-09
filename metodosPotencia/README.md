@@ -12,5 +12,5 @@ dotnet new console -n <NomeProjeto>
 cd <Nome_da_pasta>
 ```
 ```bash
-dotnet run
+dotnet run <nome_metodo>
 ```

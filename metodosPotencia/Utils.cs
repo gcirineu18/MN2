@@ -42,4 +42,16 @@ class Utils
 
         return normalized_v;
     }
+
+    public static void PrintMatrix(double[,] m)
+    {
+        int rows = m.GetLength(0), cols = m.GetLength(1);
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+                Console.Write($"{m[i, j],8:F2} ");
+            Console.WriteLine();
+        }
+    }
+
 }

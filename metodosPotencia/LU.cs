@@ -2,49 +2,49 @@
 
 public class LU
 {
-    public static double[] Solver(double[,] matrix,  double[] v)
+    public static double[] Solver(double[,] Lmatrix, double[,] Umatrix, double[] v)
     {
-        var(Lmatrix, Umatrix) = Decomposition(matrix);
         var y = ForwardReduction(Lmatrix, v);
         var x = BackSubstitution(Umatrix, y);
         return x;
     }
 
     private static double[] ForwardReduction(double[,] Lmatrix, double[] b)
-{
-    int length = b.Length;
-    double[] y = new double[length];
-
-    for (int i = 0; i < length; i++)
     {
-        double sum = 0.0;
-        for (int j = 0; j < i; j++)
+        int length = b.Length;
+        double[] y = new double[length];
+
+        for (int i = 0; i < length; i++)
         {
-            sum += Lmatrix[i, j] * y[j];
+            double sum = 0.0;
+            for (int j = 0; j < i; j++)
+            {
+                sum += Lmatrix[i, j] * y[j];
+            }
+            y[i] = (b[i] - sum) / Lmatrix[i, i];
         }
-        y[i] = (b[i] - sum) / Lmatrix[i, i];
+
+        return y;
     }
 
-    return y;
-}
-
-private static double[] BackSubstitution(double[,] Umatrix, double[] y)
-{
-    int length = y.Length;
-    double[] x = new double[length];
-
-    for (int i = length - 1; i >= 0; i--)
+    private static double[] BackSubstitution(double[,] Umatrix, double[] y)
     {
-        double sum = 0.0;
-        for (int j = i + 1; j < length; j++)
-        {
-            sum += Umatrix[i, j] * x[j];
-        }
-        x[i] = (y[i] - sum) / Umatrix[i, i];
-    }
+        int length = y.Length;
+        double[] x = new double[length];
 
-    return x;
-}    public static (double[,], double[,]) Decomposition(double[,] matrix )
+        for (int i = length - 1; i >= 0; i--)
+        {
+            double sum = 0.0;
+            for (int j = i + 1; j < length; j++)
+            {
+                sum += Umatrix[i, j] * x[j];
+            }
+            x[i] = (y[i] - sum) / Umatrix[i, i];
+        }
+
+        return x;
+    }   
+    public static (double[,], double[,]) Decomposition(double[,] matrix )
     {
         int length = matrix.GetLength(0);
         double[,] Lmatrix = new double[length, length];

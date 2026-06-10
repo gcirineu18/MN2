@@ -54,4 +54,42 @@ class Utils
         }
     }
 
+    public static double[,] MatrixScalarProduct(double[,] m1, double scalar)
+    {
+        int rows = m1.GetLength(0), cols = m1.GetLength(1);
+        double[,] result = new double[rows,cols];
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                result[i,j] = m1[i,j] * scalar;
+            }              
+        }
+        return result;
+    }
+
+    public static double[,] MatrixSubtraction(double[,] m1, double[,] m2)
+    
+    {
+        int rows = m1.GetLength(0), cols = m1.GetLength(1);
+        double[,] result = new double[rows,cols];
+        for (int i = 0; i < rows; i++)
+        {
+            for (int j = 0; j < cols; j++)
+            {
+                result[i,j] = m1[i,j] - m2[i,j];
+            }              
+        }
+        return result;
+    }
+
+    public static void PrintResults(double lambdaOld, double[] vOld, int steps)
+    {
+        Console.WriteLine($"Lambda Old: {lambdaOld}\nVector elements:");
+        foreach(double value in vOld){
+            Console.Write($"{value}, " );
+        }
+        Console.WriteLine($"\nNº de passos: {steps}");
+    }
+
 }

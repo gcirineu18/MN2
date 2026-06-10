@@ -4,7 +4,7 @@ using System.Numerics;
 
 public class PotenciaInversa: IPotencia{
     
-    public static void Execute(double[] vOld, double[,] matrix, double epsilon, double lambdaOld = 0.0){
+    public static (double, double[], int) Execute(double[] vOld, double[,] matrix, double epsilon, double lambdaOld = 0.0, double palpite = 0.0){
         int length = matrix.GetLength(0);
         vOld = Utils.normalize(vOld);
         double[] vNew = new double[length];
@@ -12,10 +12,11 @@ public class PotenciaInversa: IPotencia{
         double erroRelativo = 1.0;
 
         int steps = 0;
+        var(Lmatrix, Umatrix) = LU.Decomposition(matrix);
         while(erroRelativo > epsilon)
         {      
             ++steps;
-            vNew = LU.Solver(matrix, vOld);
+            vNew = LU.Solver(Lmatrix, Umatrix, vOld);
 
             lambdaNew = Utils.dotProduct(vOld, vNew);
 
@@ -25,11 +26,8 @@ public class PotenciaInversa: IPotencia{
             
         }
         lambdaOld = 1.0 /lambdaOld;
-        Console.WriteLine($"Lambda Old: {lambdaOld}\nVector elements:");
-        foreach(double value in vOld){
-            Console.Write($"{value}, " );
-        }
-        Console.WriteLine($"\nNº de passos: {steps}");
+
+        return(lambdaOld, vOld, steps);
     }
 
 }

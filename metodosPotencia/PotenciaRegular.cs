@@ -1,7 +1,7 @@
 
 public class PotenciaRegular: IPotencia{
     
-    public static void Execute(double[] vOld, double[,] matrix, double epsilon, double lambdaOld = 0.0){
+    public static (double, double[], int) Execute(double[] vOld, double[,] matrix, double epsilon, double lambdaOld = 0.0, double palpite = 0.0){
         int length = matrix.GetLength(0);
         vOld = Utils.normalize(vOld);
         double[] vNew = new double[length];
@@ -28,10 +28,6 @@ public class PotenciaRegular: IPotencia{
             lambdaOld = lambdaNew;
             
         }
-        Console.WriteLine($"Lambda Old: {lambdaOld}\nVector elements:");
-        foreach(double value in vOld){
-            Console.Write($"{value}, " );
-        }
-        Console.WriteLine($"\nNº de passos: {steps}");
+        return(lambdaOld, vOld, steps);
     }
 }

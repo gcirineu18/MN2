@@ -1,8 +1,4 @@
 import numpy as np
-#TODO: Colocar as ordens de erro para cada método
-# Forward: falta 0(h^2), 0(h^3), 0(h^4)
-# Backward: falta 0(h^2), 0(h^3), 0(h^4)
-# Central: falta 0(h^1), 0(h^3), 0(h^4)
 
 class Function:
     """Classe que representa a função a ser derivada"""
@@ -141,22 +137,65 @@ class Derivative:
                         return ((28/3) * Function.f(self.x) - (111/2) * Function.f(self.x - self.delta_x) + 142 * Function.f(self.x - 2 * self.delta_x) - (1219/6) * Function.f(self.x - 3 * self.delta_x) + 176 * Function.f(self.x - 4 * self.delta_x) - (185/2) * Function.f(self.x - 5 * self.delta_x) + (82/3) * Function.f(self.x - 6 * self.delta_x) - (7/2) * Function.f(self.x - 7 * self.delta_x)) / (self.delta_x ** 4)
                     case _:
                         return "Invalid derivative order!"
+            case _:
+                return "Invalid error order!"
 
     def central_derivative(self):
         """Calcula a derivada usando a filosofia Central"""
         derivative_order = int(input("Choose the 'derivative_order' value (1 - First | 2 - Second | 3 - Third | 4 - Fourth): "))
-        match derivative_order:
+        error_order = int(input("Choose the 'error_order' value (1 - O(h) | 2 - O(h^2) | 3 - O(h^3) | 4 - O(h^4)): "))
+        match error_order:
             case 1:
-                return (Function.f(self.x + self.delta_x) - Function.f(self.x - self.delta_x)) / (2 * self.delta_x)
-            case 2:
-                return (Function.f(self.x + self.delta_x) - (2 * Function.f(self.x)) + Function.f(self.x - self.delta_x)) / (self.delta_x ** 2)
-            case 3:
-                return (Function.f(self.x + (2 * self.delta_x)) - (2 * Function.f(self.x + self.delta_x)) + (2 * Function.f(self.x - self.delta_x)) - Function.f(self.x - (2 * self.delta_x))) / (2 * (self.delta_x ** 3))
-            case 4:
-                return (Function.f(self.x + (2 * self.delta_x)) - (4 * Function.f(self.x + self.delta_x)) + (6 * Function.f(self.x)) - (4 * Function.f(self.x - self.delta_x)) + Function.f(self.x - (2 * self.delta_x))) / (self.delta_x ** 4)
-            case _:
-                return "Invalid derivative order!"
+                match derivative_order:
+                    case 1:
+                        return (Function.f(self.x + 0.5 * self.delta_x) - Function.f(self.x - 0.5 * self.delta_x))/self.delta_x
+                    case 2:
+                        return (Function.f(self.x-self.delta_x) - 2 * Function.f(self.x) + Function.f(self.x + self.delta_x))/(self.delta_x ** 2)
+                    case 3:
+                        return (Function.f(self.x + 2 * self.delta_x) - 2 * Function.f(self.x + self.delta_x) + 2 * Function.f(self.x - self.delta_x) - Function.f(self.x - 2 * self.delta_x))/(2 * (self.delta_x ** 3))
+                    case 4:
+                        return (Function.f(self.x + 2 * self.delta_x) - 4 * Function.f(self.x + self.delta_x) + 6 * Function.f(self.x) - 4 * Function.f(self.x - self.delta_x) + Function.f(self.x - 2 * self.delta_x)) / (self.delta_x ** 4)
+                    case _:
+                        return "Invalid derivative order!"
 
+            case 2:
+                match derivative_order:
+                    case 1:
+                        return (Function.f(self.x + self.delta_x) - Function.f(self.x - self.delta_x)) / (2 * self.delta_x)
+                    case 2:
+                        return (Function.f(self.x + self.delta_x) - (2 * Function.f(self.x)) + Function.f(self.x - self.delta_x)) / (self.delta_x ** 2)
+                    case 3:
+                        return (Function.f(self.x + (2 * self.delta_x)) - (2 * Function.f(self.x + self.delta_x)) + (2 * Function.f(self.x - self.delta_x)) - Function.f(self.x - (2 * self.delta_x))) / (2 * (self.delta_x ** 3))
+                    case 4:
+                        return (Function.f(self.x + (2 * self.delta_x)) - (4 * Function.f(self.x + self.delta_x)) + (6 * Function.f(self.x)) - (4 * Function.f(self.x - self.delta_x)) + Function.f(self.x - (2 * self.delta_x))) / (self.delta_x ** 4)
+                    case _:
+                        return "Invalid derivative order!"
+            case 3:
+                match derivative_order:
+                    case 1:
+                        return (Function.f(self.x - 1.5 * self.delta_x) - 27 * Function.f(self.x - 0.5 * self.delta_x) + 27 * Function.f(self.x + 0.5 * self.delta_x) - Function.f(self.x + 1.5 * self.delta_x))/(24 * self.delta_x)
+                    case 2:
+                        return (Function.f(self.x - self.delta_x) - 2 * Function.f(self.x) + Function.f(self.x + self.delta_x))/(self.delta_x ** 2)
+                    case 3:
+                        return (Function.f(self.x - 2.5 * self.delta_x) - 13 * Function.f(self.x - 1.5 * self.delta_x) + 34 * Function.f(self.x - 0.5 * self.delta_x) - 34 * Function.f(self.x + 0.5 * self.delta_x) + 13 * Function.f(self.x + 1.5 * self.delta_x) - Function.f(self.x + 2.5 * self.delta_x)) / (8 * (self.delta_x ** 3))
+                    case 4:
+                        return (-Function.f(self.x - 3 * self.delta_x) + 12 * Function.f(self.x - 2 * self.delta_x) - 39 * Function.f(self.x - self.delta_x) + 56 * Function.f(self.x) - 39 * Function.f(self.x + self.delta_x) + 12 * Function.f(self.x + 2 * self.delta_x) - Function.f(self.x + 3 * self.delta_x)) / (6 * (self.delta_x ** 4))
+                    case _:
+                        return "Invalid derivative order!"
+            case 4:
+                match derivative_order:
+                    case 1:
+                        return (Function.f(self.x - 2 * self.delta_x) - 8 * Function.f(self.x - self.delta_x) + 8 * Function.f(self.x + self.delta_x) - Function.f(self.x + 2 * self.delta_x)) / (12 * self.delta_x)
+                    case 2:
+                        return (-Function.f(self.x - 2 * self.delta_x) + 16 * Function.f(self.x - self.delta_x) - 30 * Function.f(self.x) + 16 * Function.f(self.x + self.delta_x) - Function.f(self.x + 2 * self.delta_x)) / (12 * (self.delta_x ** 2))
+                    case 3:
+                        return (Function.f(self.x - 3 * self.delta_x) - 8 * Function.f(self.x - 2 * self.delta_x) + 13 * Function.f(self.x - self.delta_x) - 13 * Function.f(self.x + self.delta_x) + 8 * Function.f(self.x + 2 * self.delta_x) - Function.f(self.x + 3 * self.delta_x)) / (8 * (self.delta_x ** 3))
+                    case 4:
+                        return (-Function.f(self.x - 3 * self.delta_x) + 12 * Function.f(self.x - 2 * self.delta_x) - 39 * Function.f(self.x - self.delta_x) + 56 * Function.f(self.x) - 39 * Function.f(self.x + self.delta_x) + 12 * Function.f(self.x + 2 * self.delta_x) - Function.f(self.x + 3 * self.delta_x)) / (6 * (self.delta_x ** 4))
+                    case _:
+                        return "Invalid derivative order!"
+            case _:
+                return "Invalid error order!"
 
 if __name__ == "__main__":
     x = np.pi / 2

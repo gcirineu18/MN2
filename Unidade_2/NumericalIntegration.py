@@ -1,5 +1,5 @@
 # TODO: Create the code to calculate numerical integration using the following methods:
-# Fórmulas Newton-Cotes com polinômios de substituição de graus 1 a 3, fórmulas abertas e fechadas.
+# Fórmulas Newton-Cotes com polinômios de substituição de graus 1 a 4, fórmulas abertas e fechadas.
 # Gauss-Legendre com n=2, 3 e 4 pontos
 # Gauss-Hermite com n=2, 3 e 4 pontos
 # Gauss-Laguerre com n=2, 3  e 4 pontos
@@ -24,7 +24,7 @@ class NumericalIntegration:
         self.xi = xi
         self.xf = xf
 
-    # =-=-=-=-=-=-=-= Fórmulas Newton-Cotes com polinômios de substituição de graus 1 a 3, fórmulas abertas e fechadas. =-=-=-=-=-=-=-=
+    # =-=-=-=-=-=-=-= Fórmulas Newton-Cotes com polinômios de substituição de graus 1 a 4, fórmulas abertas e fechadas. =-=-=-=-=-=-=-=
     # --------- Abordagem Fechada ---------
     # Regra do trapézio fechada - Grau 1
     def trapezoidal_rule(self):
@@ -73,7 +73,77 @@ class NumericalIntegration:
         h = (self.xf - self.xi) / 6
         
         return ((6 * h) / 20) * (11 * Function.f(self.xi + h) - 14 * Function.f(self.xi + 2 * h) + 26 * Function.f(self.xi + 3 * h) - 14 * Function.f(self.xi + 4 * h) + 11 * Function.f(self.xi + 5* h))
+
+    # =-=-=-=-=-=-=-= Gauss-Legendre com n=2, 3 e 4 pontos =-=-=-=-=-=-=-=
+    def gauss_legendre(self, n):
+        if n == 2:
+            points = [-np.sqrt(1/3), np.sqrt(1/3)]
+            weights = [1, 1]
+        elif n == 3:
+            points = [-np.sqrt(3/5), 0, np.sqrt(3/5)]
+            weights = [5/9, 8/9, 5/9]
+        elif n == 4:
+            points = [-np.sqrt((3 + 2 * np.sqrt(6/5)) / 7), -np.sqrt((3 - 2 * np.sqrt(6/5)) / 7), np.sqrt((3 - 2 * np.sqrt(6/5)) / 7), np.sqrt((3 + 2 * np.sqrt(6/5)) / 7)]
+            weights = [(18 - np.sqrt(30)) / 36, (18 + np.sqrt(30)) / 36, (18 + np.sqrt(30)) / 36, (18 - np.sqrt(30)) / 36]
+        else:
+            raise ValueError("n deve ser 2, 3 ou 4")
         
+        # Transformação para o intervalo [xi, xf]
+        transformed_points = [((self.xf + self.xi) / 2) + ((self.xf - self.xi) / 2) * p for p in points]
+        
+        return ((self.xf - self.xi) / 2) * sum(w * Function.f(tp) for w, tp in zip(weights, transformed_points))
+
+    # =-=-=-=-=-=-=-= Gauss-Hermite com n=2, 3 e 4 pontos =-=-=-=-=-=-=-=
+    def gauss_hermite(self, n):
+        if n == 2:
+            points = [-1/np.sqrt(2), 1/np.sqrt(2)]
+            weights = [np.sqrt(np.pi)/2, np.sqrt(np.pi)/2]
+        elif n == 3:
+            points = [-np.sqrt(3/2), 0, np.sqrt(3/2)]
+            weights = [np.sqrt(np.pi)/6, 2*np.sqrt(np.pi)/3, np.sqrt(np.pi)/6]
+        elif n == 4:
+            # Conferir os calculos
+            points = [-np.sqrt((3 + np.sqrt(6)) / 2), -np.sqrt((3 - np.sqrt(6)) / 2), np.sqrt((3 - np.sqrt(6)) / 2), np.sqrt((3 + np.sqrt(6)) / 2)]
+            weights = [np.sqrt(np.pi) / (4 * (3 + np.sqrt(6))), np.sqrt(np.pi) / (4 * (3 - np.sqrt(6))), np.sqrt(np.pi) / (4 * (3 - np.sqrt(6))), np.sqrt(np.pi) / (4 * (3 + np.sqrt(6)))]
+        else:
+            raise ValueError("n deve ser 2, 3 ou 4")
+        
+        return sum(w * Function.f(p) for w, p in zip(weights, points))
+
+    # =-=-=-=-=-=-=-= Gauss-Laguerre com n=2, 3  e 4 pontos =-=-=-=-=-=-=-=
+    def gauss_laguerre(self, n):
+        if n == 2:
+            points = [2 - np.sqrt(2), 2 + np.sqrt(2)]
+            weights = [1/4 * (2 + np.sqrt(2)), 1/4 * (2 - np.sqrt(2))]
+        elif n == 3:
+            points = [0.4157745568, 2.2942803603, 6.2899450829]
+            weights = [0.7110930099, 0.2785177336, 0.0103892565]
+        elif n == 4:
+            # Conferir os calculos
+            points = [0.322548, 1.74576, 4.53662, 9.39507]
+            weights = [0.603154, 0.357419, 0.0388889, 0.000539295]
+        else:
+            raise ValueError("n deve ser 2, 3 ou 4")
+        
+        return sum(w * Function.f(p) for w, p in zip(weights, points))
+    
+    # =-=-=-=-=-=-=-= Gauss-chebyshev com n=2, 3 e 4 pontos =-=-=-=-=-=-=-=
+    def gauss_chebyshev(self, n):
+        if n == 2:
+            points = [-1/np.sqrt(2), 1/np.sqrt(2)]
+            weights = [np.pi/2, np.pi/2]
+        elif n == 3:
+            points = [-np.sqrt(3)/2, 0, np.sqrt(3)/2]
+            weights = [np.pi/3, np.pi/3, np.pi/3]
+        elif n == 4:
+            # Conferir os calculos
+            points = [-np.sqrt((1 + np.sqrt(1/2)) / 2), -np.sqrt((1 - np.sqrt(1/2)) / 2), np.sqrt((1 - np.sqrt(1/2)) / 2), np.sqrt((1 + np.sqrt(1/2)) / 2)]
+            weights = [np.pi/4, np.pi/4, np.pi/4, np.pi/4]
+        else:
+            raise ValueError("n deve ser 2, 3 ou 4")
+        
+        return sum(w * Function.f(p) for w, p in zip(weights, points))
+
 
 if __name__ == "__main__":
     pass

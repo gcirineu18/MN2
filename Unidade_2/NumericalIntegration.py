@@ -180,4 +180,36 @@ class NumericalIntegration:
 
 
 if __name__ == "__main__":
-    pass
+    xi = 0
+    xf = 1
+    integration = NumericalIntegration(xi, xf)
+
+    print("Fórmulas Newton-Cotes:")
+    print("Trapézio (fechada):", integration.trapezoidal_rule())
+    print("Simpson 1/3:", integration.simpsons_1_3())
+    print("Simpson 3/8:", integration.simpsons_3_8())
+    print("Fórmula fechada grau 4:", integration.closed_formula_degree_4())
+    print("Trapézio (aberta):", integration.open_trapezoidal_rule())
+    print("Milne:", integration.milne_rule())
+    print("Fórmula aberta grau 3:", integration.open_formula_degree_3())
+    print("Fórmula aberta grau 4:", integration.open_formula_degree_4())
+
+    print("\nGauss-Legendre:")
+    for n in [2, 3, 4]:
+        print(f"n={n}:", integration.gauss_legendre(n))
+
+    print("\nGauss-Hermite:")
+    for n in [2, 3, 4]:
+        print(f"n={n}:", integration.gauss_hermite(n))
+
+    print("\nGauss-Laguerre:")
+    for n in [2, 3, 4]:
+        print(f"n={n}:", integration.gauss_laguerre(n))
+
+    print("\nGauss-Chebyshev:")
+    for n in [2, 3, 4]:
+        print(f"n={n}:", integration.gauss_chebyshev(n))
+
+    print("\nExponencial Simples e Dupla:")
+    print("Exponencial Simples:", integration.exponential_simple())
+    print("Exponencial Dupla:", integration.exponential_double())

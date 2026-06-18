@@ -102,7 +102,6 @@ class NumericalIntegration:
             points = [-np.sqrt(3/2), 0, np.sqrt(3/2)]
             weights = [np.sqrt(np.pi)/6, 2*np.sqrt(np.pi)/3, np.sqrt(np.pi)/6]
         elif n == 4:
-            # Conferir os calculos
             points = [-np.sqrt((3 + np.sqrt(6)) / 2), -np.sqrt((3 - np.sqrt(6)) / 2), np.sqrt((3 - np.sqrt(6)) / 2), np.sqrt((3 + np.sqrt(6)) / 2)]
             weights = [np.sqrt(np.pi) / (4 * (3 + np.sqrt(6))), np.sqrt(np.pi) / (4 * (3 - np.sqrt(6))), np.sqrt(np.pi) / (4 * (3 - np.sqrt(6))), np.sqrt(np.pi) / (4 * (3 + np.sqrt(6)))]
         else:
@@ -119,7 +118,6 @@ class NumericalIntegration:
             points = [0.4157745568, 2.2942803603, 6.2899450829]
             weights = [0.7110930099, 0.2785177336, 0.0103892565]
         elif n == 4:
-            # Conferir os calculos
             points = [0.322548, 1.74576, 4.53662, 9.39507]
             weights = [0.603154, 0.357419, 0.0388889, 0.000539295]
         else:
@@ -136,13 +134,49 @@ class NumericalIntegration:
             points = [-np.sqrt(3)/2, 0, np.sqrt(3)/2]
             weights = [np.pi/3, np.pi/3, np.pi/3]
         elif n == 4:
-            # Conferir os calculos
             points = [-np.sqrt((1 + np.sqrt(1/2)) / 2), -np.sqrt((1 - np.sqrt(1/2)) / 2), np.sqrt((1 - np.sqrt(1/2)) / 2), np.sqrt((1 + np.sqrt(1/2)) / 2)]
             weights = [np.pi/4, np.pi/4, np.pi/4, np.pi/4]
         else:
             raise ValueError("n deve ser 2, 3 ou 4")
         
         return sum(w * Function.f(p) for w, p in zip(weights, points))
+
+    # =-=-=-=-=-=-=-= "Dino"  Exponencial simples e Dupla =-=-=-=-=-=-=-=
+    def exponential_simple(self, c=5.0, n=1000):
+        a = self.xi
+        b = self.xf
+        
+        s = np.linspace(-c, c, n + 1)
+        h = (2 * c) / n
+
+        x_s = ((a + b) / 2) + ((b - a) / 2) * np.tanh(s)
+        
+        dx_ds = ((b - a) / 2) * (1 / np.cosh(s)**2)
+
+        f_bar = Function.f(x_s) * dx_ds
+        
+        integral = (h / 2) * (f_bar[0] + 2 * np.sum(f_bar[1:-1]) + f_bar[-1])
+        
+        return integral
+
+    def exponential_double(self, c=3.5, n=1000):
+        a = self.xi
+        b = self.xf
+        
+        s = np.linspace(-c, c, n + 1)
+        h = (2 * c) / n
+        
+        inner_term = (np.pi / 2) * np.sinh(s)
+
+        x_s = ((a + b) / 2) + ((b - a) / 2) * np.tanh(inner_term)
+        
+        dx_ds = ((b - a) / 2) * (np.pi / 2) * (np.cosh(s) / (np.cosh(inner_term)**2))
+
+        f_bar = Function.f(x_s) * dx_ds
+        
+        integral = (h / 2) * (f_bar[0] + 2 * np.sum(f_bar[1:-1]) + f_bar[-1])
+        
+        return integral
 
 
 if __name__ == "__main__":

@@ -69,6 +69,7 @@ class NumericalIntegration:
         
         return ((5 * h) / 24) * (11 * Function.f(self.xi + h) + Function.f(self.xi + 2 * h) + Function.f(self.xi + 3 * h) + 11 * Function.f(self.xi + 4 * h))
     
+    # Fórmula sem nome - Grau 4
     def open_formula_degree_4(self):
         h = (self.xf - self.xi) / 6
         
@@ -178,6 +179,67 @@ class NumericalIntegration:
         
         return integral
 
+    # =-=-=-=-=-=-=-= Tarefas de Integrais Duplas (Aulas 15 e 16) =-=-=-=-=-=-=-=
+    def aula15_surface_area(self):
+        """
+        Tarefa Aula 15: Calcular a área da superfície z = 0.2(x^2 - y^2) 
+        sobre a região circular (x^2/1600 + y^2/1600 <= 1).
+        Utilizando Gauss-Legendre Bidimensional com n=3.
+        """
+        points = [-np.sqrt(3/5), 0, np.sqrt(3/5)]
+        weights = [5/9, 8/9, 5/9]
+        
+        area = 0.0
+        for i in range(3):
+            for j in range(3):
+                u = points[j]
+                v = points[i]
+                
+                w_u = weights[j]
+                w_v = weights[i]
+                
+                J_total = 400 * np.pi * (u + 1)
+                
+                x = 20 * (u + 1) * np.cos(np.pi * (v + 1))
+                y = 20 * (u + 1) * np.sin(np.pi * (v + 1))
+                
+                df_dx = 0.4 * x
+                df_dy = -0.4 * y
+                ds = np.sqrt(df_dx**2 + df_dy**2 + 1)
+                
+                area += w_u * w_v * ds * J_total
+                
+        return area
+
+    def aula16_volume(self):
+        """
+        Tarefa Aula 16: Calcular o volume de z = 0.2(x^2 - y^2) 
+        sobre a região elíptica (x^2/1600 + y^2/400 <= 1).
+        Utilizando Gauss-Legendre Bidimensional com n=3.
+        """
+        points = [-np.sqrt(3/5), 0, np.sqrt(3/5)]
+        weights = [5/9, 8/9, 5/9]
+        
+        volume = 0.0
+        for i in range(3):
+            for j in range(3):
+                u = points[j]
+                v = points[i]
+                
+                w_u = weights[j]
+                w_v = weights[i]
+                
+                J_total = 200 * np.pi * (u + 1)
+                
+                x = 20 * (u + 1) * np.cos(np.pi * (v + 1))
+                y = 10 * (u + 1) * np.sin(np.pi * (v + 1))
+                
+                f_xy = 0.2 * (x**2 - y**2)
+                
+                volume += w_u * w_v * f_xy * J_total
+                
+        return volume
+
 
 if __name__ == "__main__":
     xi = 0
@@ -213,3 +275,7 @@ if __name__ == "__main__":
     print("\nExponencial Simples e Dupla:")
     print("Exponencial Simples:", integration.exponential_simple())
     print("Exponencial Dupla:", integration.exponential_double())
+
+    print("\nTarefas de Integrais Duplas:")
+    print("Área da superfície (Aula 15):", integration.aula15_surface_area())
+    print("Volume (Aula 16):", integration.aula16_volume())

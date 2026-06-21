@@ -92,4 +92,6 @@ class Utils
         Console.WriteLine($"\nNº de passos: {steps}");
     }
 
+    
+
 }

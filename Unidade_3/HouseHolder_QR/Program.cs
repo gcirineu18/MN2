@@ -57,7 +57,7 @@ public class HouseHolder{
     {
         double[,] matrix1 = {{7.0, 8.0, 9.0},{4.0, 5.0, 1.0},{2.0, 2.0, 0.0}};  
         double[,] matrix2 = {{1.0, 3.0, 8.0},{4.0, 0.0, 2.0},{7.0, 1.0, 9.0}};  
-
+        double epsilon = 0.0000000001;
         double[] vector = [2, 3, 1];
 
         var mult = Utils.MultiplyMatrixesSameDimension(matrix1, matrix2);
@@ -85,9 +85,26 @@ public class HouseHolder{
             {4,5,6,7,8,9,5,5,6,32}
         };
 
-        (result, mult) = CalculateHouseHoulder(matrix3, 10);
-        Utils.PrintMatrix(result);
-        Console.WriteLine("\n");
-        Utils.PrintMatrix(mult);
+        int n  = matrix3.GetLength(0);
+        var(T, HH) = CalculateHouseHoulder(matrix3, n);
+        Console.WriteLine("\n Matriz A:");
+        Utils.PrintMatrix(matrix3);
+        Console.WriteLine("\n Matriz Tridiagonal:");
+        Utils.PrintMatrix(T);
+        Console.WriteLine("\n Matriz HH:");
+        Utils.PrintMatrix(HH);
+       
+       var(P, lambda) = QR.MetodoQR(T, n, epsilon);
+
+       var autovetores = Utils.MultiplyMatrixesSameDimension(HH, P);
+
+       Console.WriteLine($"Autovalores:");
+       foreach( double lamb in lambda)
+        {
+            Console.WriteLine(lamb);
+        }
+
+       Console.WriteLine($"Autovetores:");
+       Utils.PrintMatrix(autovetores);
     }
 }
